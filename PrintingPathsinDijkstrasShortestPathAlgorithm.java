@@ -1,3 +1,80 @@
+package com.paytm.disbursal.recon.scheduler;
+
+import java.util.Arrays;
+import java.util.PriorityQueue;
+
+/**
+ * @author sunilyadav
+ */
+public class DijkstraAlgo
+{
+    public static void main(String []args){
+        System.out.println("Hello, World!");
+
+        int[][] adjacencyMatrix = { { 0, 4, 0, 0, 0, 0, 0,8, 0 },
+                { 4, 0, 8, 0, 0, 0, 0, 11, 0 },
+                { 0, 8, 0, 7, 0, 4, 0, 0, 2 },
+                { 0, 0, 7, 0, 9, 14, 0, 0, 0 },
+                { 0, 0, 0, 9, 0, 10, 0, 0, 0 },
+                { 0, 0, 4, 0, 10, 0, 2, 0, 0 },
+                { 0, 0, 0, 14, 0, 2, 0, 1, 6 },
+                { 8, 11, 0, 0, 0, 0, 1, 0, 7 },
+                { 0, 0, 2, 0, 0, 0, 6, 7, 0 } };
+
+        dijkstra(adjacencyMatrix, 0);
+    }
+    static class Pair{
+        int dist;
+        int v;
+        public Pair(int dist, int v){
+            this.dist= dist;
+            this.v = v;
+        }
+    }
+
+    private static void dijkstra(int[][] adj, int src){
+        int n = adj.length;
+        int []dist = new int [n];
+        Arrays.fill(dist,10000);
+        int []parent = new int[n];
+        PriorityQueue<Pair> pq = new PriorityQueue<Pair>((p1,p2)->(p2.dist-p1.dist));
+        pq.offer(new Pair(0,src));
+        dist[src] = 0;
+        parent[src] = 1;
+        while(!pq.isEmpty()){
+            Pair p = pq.poll();
+            //System.out.print(p.dist+" "+p.v);
+            for(int i=0;i<n;i++){
+                int next = adj[p.v][i];
+                //System.out.print(next+" "+p.v);
+                if(next == 0){
+                    continue;
+                }
+                System.out.print(dist[p.v]+" "+p.v+ " "+next);
+                if(dist[i] > (dist[p.v]+next)){
+                    System.out.print(" inside if "+i+" "+p.v);
+                    dist[i] = dist[p.v]+next;
+                    pq.offer(new Pair(dist[i],i));
+                    parent[i] = p.v;
+                }
+
+            }
+        }
+
+        System.out.println("---------");
+        for(int i=0;i<n;i++){
+            System.out.print(i+": dist :"+dist[i]+" "+"path --:");
+            int x = i;
+            while(x != src){
+                x = parent[x];
+                System.out.print(x+" ");
+            }
+            System.out.println();
+        }
+    }
+}
+******************************************************************************************************************
+
 public class PrintingPathsinDijkstrasShortestPathAlgorithm {
 	static int INF = 100000;
 	public static void main(String[] args) {
