@@ -56,5 +56,55 @@ public class TopologicalSorting {
 	        
 	        g.topologicalSort();
 	}
-
+	
 }
+
+
+static class  Graph{
+        int v ;
+        LinkedList<Integer> []adj;
+        public Graph(int v){
+            this.v = v;
+            adj = new LinkedList[v];
+            for(int i=0;i<v;i++)
+                adj[i] = new LinkedList<Integer>();
+        }
+
+        public void addEdge(int u, int v) {
+            adj[u].add(v);
+        }
+
+        public void topologicalSort() {
+            int []indegree = new int[v];
+            calculateIndegree(indegree);
+            Queue<Integer> q = new LinkedList<>();
+            for(int i=0;i<v;i++){
+                if(indegree[i] ==0)
+                    q.offer(i);
+            }
+            int[] ans = new int[v];
+            int i=0;
+            while(!q.isEmpty()){
+                int x = q.poll();
+                ans[i++] = x;
+                for(int nei : adj[x]){
+                    indegree[nei]--;
+                    if(indegree[nei] == 0){
+                        q.offer(nei);
+                    }
+                }
+            }
+            if(!q.isEmpty()){
+                System.out.println("the given gtaph is not DAG graph");
+            }else{
+                Arrays.stream(ans).forEach(x->System.out.print(x+" "));
+            }
+        }
+
+        private void calculateIndegree(int[] indegree) {
+            for(int i=0;i<v;i++){
+                for(int x : adj[i])
+                    indegree[x]++;
+            }
+        }
+    }
